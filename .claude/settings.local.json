@@ -11,7 +11,16 @@
       "Bash(for f in \"C:/Users/hp/OneDrive/Desktop/lms-temp\"/*)",
       "Bash(do cp -r \"$f\" \"C:/Users/hp/OneDrive/Desktop/LMS/\")",
       "Bash(done)",
-      "Bash(npx shadcn@latest init:*)"
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx shadcn@latest add card input label select textarea badge avatar dropdown-menu dialog sheet tabs table checkbox separator skeleton toast tooltip popover command scroll-area progress switch calendar alert alert-dialog -y)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx tsc:*)",
+      "Bash(findstr:*)",
+      "Bash(if not exist \"C:\\\\Users\\\\hp\\\\OneDrive\\\\Desktop\\\\LMS\\\\src\\\\providers\" mkdir \"C:\\\\Users\\\\hp\\\\OneDrive\\\\Desktop\\\\LMS\\\\src\\\\providers\")",
+      "Bash(dir:*)",
+      "Bash(node -e:*)",
+      "Bash(npx next build:*)",
+      "Bash(taskkill:*)"
     ]
   }
 }
