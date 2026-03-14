@@ -157,7 +157,9 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-
+      <p className="mt-10 text-xs text-muted-foreground">
+        crafted with care Tashfeen Bin Riaz
+      </p>
     </div>
   );
 }
