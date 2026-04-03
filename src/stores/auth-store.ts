@@ -18,6 +18,11 @@ const useAuthStore = create<AuthState>((set) => ({
 
   login: (userId: string) => {
     const found = users.find((u) => u.id === userId) ?? null;
+    if (found) {
+      document.cookie = `lms-role=${found.role};path=/;max-age=86400;SameSite=Lax`;
+    } else {
+      document.cookie = "lms-role=;path=/;max-age=0";
+    }
     set({
       user: found,
       isAuthenticated: found !== null,
@@ -26,6 +31,11 @@ const useAuthStore = create<AuthState>((set) => ({
 
   loginAsRole: (role: UserRole) => {
     const found = users.find((u) => u.role === role) ?? null;
+    if (found) {
+      document.cookie = `lms-role=${found.role};path=/;max-age=86400;SameSite=Lax`;
+    } else {
+      document.cookie = "lms-role=;path=/;max-age=0";
+    }
     set({
       user: found,
       isAuthenticated: found !== null,
@@ -33,6 +43,7 @@ const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
+    document.cookie = "lms-role=;path=/;max-age=0";
     set({
       user: null,
       isAuthenticated: false,
