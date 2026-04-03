@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useMemo, useState } from "react";
+import { use, useCallback, useMemo, useState } from "react";
 import {
   ArrowLeft,
   Calendar,
@@ -20,9 +20,10 @@ import {
   Send,
 } from "lucide-react";
 import Link from "next/link";
+import { useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "@/stores/auth-store";
 import { useAssignment } from "@/lib/services/hooks";
-import { getCourseById } from "@/lib/mock-data";
+import { getCourseById, addSubmission } from "@/lib/mock-data";
 import {
   cn,
   formatDate,
@@ -118,6 +119,7 @@ export default function StudentAssignmentDetailPage({
   const { user } = useAuthStore();
   const userId = user?.id ?? "";
 
+  const queryClient = useQueryClient();
   const { data: assignment, isLoading } = useAssignment(assignmentId);
 
   const [content, setContent] = useState("");
@@ -138,11 +140,21 @@ export default function StudentAssignmentDetailPage({
   const overdue = assignment ? isOverdue(assignment.dueDate) : false;
   const statusConfig = assignment ? getStatusConfig(assignment.status) : null;
 
-  // Handle mock submit
-  const handleSubmit = () => {
+  // Handle submit
+  const handleSubmit = useCallback(() => {
     if (!content.trim() && !fileName) return;
+    addSubmission(assignmentId, {
+      id: `sub-${Date.now()}`,
+      assignmentId,
+      studentId: userId,
+      submittedAt: new Date().toISOString(),
+      content: content.trim() || undefined,
+      fileUrl: fileName ?? undefined,
+    });
+    queryClient.invalidateQueries({ queryKey: ['assignment', assignmentId] });
+    queryClient.invalidateQueries({ queryKey: ['assignments'] });
     setSubmitted(true);
-  };
+  }, [content, fileName, assignmentId, userId, queryClient]);
 
   // Handle mock file drop
   const handleDrop = (e: React.DragEvent) => {

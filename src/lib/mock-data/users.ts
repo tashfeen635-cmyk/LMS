@@ -233,3 +233,25 @@ export function getUserById(id: string): User | undefined {
 export function getUsersByRole(role: UserRole): User[] {
   return users.filter((user) => user.role === role);
 }
+
+// ============================================================================
+// Mutators (session-only persistence)
+// ============================================================================
+
+export function addUser(user: User) {
+  users.push(user);
+}
+
+export function updateUser(id: string, data: Partial<User>) {
+  const idx = users.findIndex((u) => u.id === id);
+  if (idx !== -1) {
+    users[idx] = { ...users[idx], ...data };
+  }
+}
+
+export function deleteUser(id: string) {
+  const idx = users.findIndex((u) => u.id === id);
+  if (idx !== -1) {
+    users.splice(idx, 1);
+  }
+}

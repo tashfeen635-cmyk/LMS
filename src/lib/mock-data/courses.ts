@@ -128,3 +128,11 @@ export function getCoursesByTeacher(teacherId: string): Course[] {
 export function getCoursesByStudent(studentId: string): Course[] {
   return courses.filter((course) => course.students.includes(studentId));
 }
+
+// ============================================================================
+// Mutators (session-only persistence)
+// ============================================================================
+
+export function addCourse(course: Course) {
+  courses.push(course);
+}

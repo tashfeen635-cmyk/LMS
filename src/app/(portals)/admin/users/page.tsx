@@ -12,7 +12,13 @@ import {
   AlertCircle,
 } from "lucide-react";
 import type { User, UserRole } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { useUsers } from "@/lib/services/hooks";
+import {
+  addUser as addUserToData,
+  updateUser as updateUserInData,
+  deleteUser as deleteUserFromData,
+} from "@/lib/mock-data";
 import { cn, getInitials } from "@/lib/utils";
 import PageHeader from "@/components/layout/page-header";
 import LoadingState from "@/components/shared/loading-state";
@@ -90,6 +96,7 @@ const MOCK_CSV_PREVIEW = [
 // ---------------------------------------------------------------------------
 
 export default function UserManagementPage() {
+  const queryClient = useQueryClient();
   const { data: users, isLoading } = useUsers();
 
   const [search, setSearch] = useState("");
@@ -198,6 +205,19 @@ export default function UserManagementPage() {
 
   // Handle add user
   function handleAddUser() {
+    const newUser: User = {
+      id: `u${Date.now()}`,
+      name: addForm.name,
+      email: addForm.email,
+      role: addForm.role,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${addForm.name.split(" ")[0]}`,
+      ...(addForm.role === "student"
+        ? { grade: addForm.department }
+        : { department: addForm.department }),
+      phone: addForm.phone || undefined,
+    };
+    addUserToData(newUser);
+    queryClient.invalidateQueries({ queryKey: ['users'] });
     setAlert({ type: "success", message: `User "${addForm.name}" created successfully.` });
     setAddForm({ name: "", email: "", role: "student", department: "", phone: "" });
     setAddOpen(false);
@@ -206,6 +226,18 @@ export default function UserManagementPage() {
 
   // Handle edit user
   function handleEditUser() {
+    if (editUser) {
+      updateUserInData(editUser.id, {
+        name: editForm.name,
+        email: editForm.email,
+        role: editForm.role,
+        ...(editForm.role === "student"
+          ? { grade: editForm.department, department: undefined }
+          : { department: editForm.department, grade: undefined }),
+        phone: editForm.phone || undefined,
+      });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    }
     setAlert({
       type: "success",
       message: `User "${editForm.name}" updated successfully.`,
@@ -217,6 +249,10 @@ export default function UserManagementPage() {
 
   // Handle delete user
   function handleDeleteUser() {
+    if (deleteTarget) {
+      deleteUserFromData(deleteTarget.id);
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    }
     setAlert({
       type: "success",
       message: `User "${deleteTarget?.name}" deleted successfully.`,
@@ -233,6 +269,18 @@ export default function UserManagementPage() {
 
   // Handle import
   function handleImport() {
+    for (const row of MOCK_CSV_PREVIEW) {
+      const newUser: User = {
+        id: `u${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        name: row.name,
+        email: row.email,
+        role: row.role as UserRole,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${row.name.split(" ")[0]}`,
+        ...(row.role === "student" ? { grade: row.grade } : { department: row.department }),
+      };
+      addUserToData(newUser);
+    }
+    queryClient.invalidateQueries({ queryKey: ['users'] });
     setAlert({
       type: "success",
       message: `${MOCK_CSV_PREVIEW.length} users imported successfully.`,

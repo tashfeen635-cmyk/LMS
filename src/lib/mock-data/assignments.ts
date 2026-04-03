@@ -1,4 +1,4 @@
-import type { Assignment, AssignmentStatus } from '@/types';
+import type { Assignment, AssignmentStatus, Submission } from '@/types';
 
 // ============================================================================
 // Mock Assignments Data
@@ -441,4 +441,18 @@ export function getAssignmentsByCourse(courseId: string): Assignment[] {
  */
 export function getAssignmentsByStatus(status: string): Assignment[] {
   return assignments.filter((assignment) => assignment.status === status);
+}
+
+// ============================================================================
+// Mutators (session-only persistence)
+// ============================================================================
+
+export function addSubmission(assignmentId: string, submission: Submission) {
+  const assignment = assignments.find((a) => a.id === assignmentId);
+  if (assignment) {
+    if (!assignment.submissions) {
+      assignment.submissions = [];
+    }
+    assignment.submissions.push(submission);
+  }
 }

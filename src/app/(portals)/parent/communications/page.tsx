@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   ArrowLeft,
   MessageSquare,
@@ -8,13 +8,14 @@ import {
   Search,
   Mail,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import useAuthStore from "@/stores/auth-store";
 import {
   useThreadsByUser,
   useMessagesByThread,
   useCoursesByStudent,
 } from "@/lib/services/hooks";
-import { getUserById } from "@/lib/mock-data";
+import { getUserById, addMessage, updateThreadLastMessage } from "@/lib/mock-data";
 import { cn, formatRelative, getInitials } from "@/lib/utils";
 import PageHeader from "@/components/layout/page-header";
 import LoadingState from "@/components/shared/loading-state";
@@ -47,6 +48,7 @@ export default function ParentCommunicationsPage() {
   const userId = user?.id ?? "";
   const childrenIds = user?.children ?? [];
 
+  const queryClient = useQueryClient();
   const { data: threads, isLoading: threadsLoading } =
     useThreadsByUser(userId || null);
 
@@ -128,13 +130,26 @@ export default function ParentCommunicationsPage() {
     setMobileShowChat(false);
   };
 
-  // Handle send message (mock)
-  const handleSendMessage = () => {
-    if (!newMessage.trim()) return;
+  // Handle send message
+  const handleSendMessage = useCallback(() => {
+    if (!newMessage.trim() || !selectedThreadId || !otherParticipant) return;
+    const now = new Date().toISOString();
+    addMessage({
+      id: `msg-${Date.now()}`,
+      senderId: userId,
+      receiverId: otherParticipant.id,
+      threadId: selectedThreadId,
+      content: newMessage.trim(),
+      timestamp: now,
+      read: false,
+    });
+    updateThreadLastMessage(selectedThreadId, newMessage.trim(), now);
+    queryClient.invalidateQueries({ queryKey: ['messages', 'thread', selectedThreadId] });
+    queryClient.invalidateQueries({ queryKey: ['threads', userId] });
     setNewMessage("");
     setMessageSent(true);
     setTimeout(() => setMessageSent(false), 2000);
-  };
+  }, [newMessage, selectedThreadId, otherParticipant, userId, queryClient]);
 
   // Handle enter key
   const handleKeyDown = (e: React.KeyboardEvent) => {

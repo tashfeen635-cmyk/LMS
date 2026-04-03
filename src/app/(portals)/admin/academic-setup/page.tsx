@@ -13,8 +13,9 @@ import {
   Clock,
 } from "lucide-react";
 import type { Term, Course } from "@/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCourses, useUsers } from "@/lib/services/hooks";
-import { getUserById } from "@/lib/mock-data";
+import { getUserById, addCourse as addCourseToData } from "@/lib/mock-data";
 import { cn, formatDate } from "@/lib/utils";
 import PageHeader from "@/components/layout/page-header";
 import LoadingState from "@/components/shared/loading-state";
@@ -113,6 +114,7 @@ const INITIAL_GRADING_SCALE: GradeScaleRow[] = [
 // ---------------------------------------------------------------------------
 
 export default function AcademicSetupPage() {
+  const queryClient = useQueryClient();
   const { data: courses, isLoading: coursesLoading } = useCourses();
   const { data: users, isLoading: usersLoading } = useUsers();
 
@@ -241,6 +243,18 @@ export default function AcademicSetupPage() {
   // ---------------------
 
   function handleAddCourse() {
+    const newCourse: Course = {
+      id: `c${Date.now()}`,
+      name: courseForm.name,
+      code: courseForm.code,
+      description: courseForm.description,
+      teacherId: courseForm.teacherId,
+      color: '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'),
+      students: [],
+      schedule: [],
+    };
+    addCourseToData(newCourse);
+    queryClient.invalidateQueries({ queryKey: ['courses'] });
     showAlert(`Course "${courseForm.name}" (${courseForm.code}) created.`);
     setCourseDialogOpen(false);
     setCourseForm({ name: "", code: "", teacherId: "", description: "" });

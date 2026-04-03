@@ -291,3 +291,19 @@ export function getMessagesByThread(threadId: string): Message[] {
     .filter((message) => message.threadId === threadId)
     .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 }
+
+// ============================================================================
+// Mutators (session-only persistence)
+// ============================================================================
+
+export function addMessage(msg: Message) {
+  messages.push(msg);
+}
+
+export function updateThreadLastMessage(threadId: string, lastMessage: string, lastMessageAt: string) {
+  const thread = messageThreads.find((t) => t.id === threadId);
+  if (thread) {
+    thread.lastMessage = lastMessage;
+    thread.lastMessageAt = lastMessageAt;
+  }
+}
