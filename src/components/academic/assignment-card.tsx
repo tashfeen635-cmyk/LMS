@@ -37,15 +37,15 @@ interface AssignmentCardProps {
 function getTypeIcon(type: AssignmentType) {
   switch (type) {
     case "homework":
-      return <BookOpen className="size-3" />;
+      return <BookOpen className="size-4" />;
     case "quiz":
-      return <HelpCircle className="size-3" />;
+      return <HelpCircle className="size-4" />;
     case "test":
-      return <FileText className="size-3" />;
+      return <FileText className="size-4" />;
     case "project":
-      return <FolderKanban className="size-3" />;
+      return <FolderKanban className="size-4" />;
     case "essay":
-      return <PenTool className="size-3" />;
+      return <PenTool className="size-4" />;
   }
 }
 
@@ -112,38 +112,38 @@ export default function AssignmentCard({
           {/* Status indicator */}
           <div className="shrink-0 pt-0.5">
             {assignment.status === "graded" && (
-              <CheckCircle className="size-5 text-emerald-500" />
+              <CheckCircle className="size-6 text-emerald-500" />
             )}
             {assignment.status === "published" && (
-              <Circle className="size-5 text-blue-500" />
+              <Circle className="size-6 text-blue-500" />
             )}
             {assignment.status === "draft" && (
-              <FileEdit className="size-5 text-muted-foreground" />
+              <FileEdit className="size-6 text-muted-foreground" />
             )}
           </div>
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="pt-0">
         <div className="flex items-center justify-between gap-3">
           {/* Points */}
-          <span className="text-sm font-medium text-muted-foreground">
+          <span className="text-base font-medium text-muted-foreground">
             {assignment.points} pts
           </span>
 
           {/* Due date indicator */}
           {overdue ? (
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-red-600 dark:text-red-400">
-              <AlertTriangle className="size-3.5" />
+            <span className="inline-flex items-center gap-1 text-sm font-medium text-red-600 dark:text-red-400">
+              <AlertTriangle className="size-4" />
               Overdue
             </span>
           ) : dueSoon ? (
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">
-              <Clock className="size-3.5" />
+            <span className="inline-flex items-center gap-1 text-sm font-medium text-yellow-600 dark:text-yellow-400">
+              <Clock className="size-4" />
               Due soon
             </span>
           ) : (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-sm text-muted-foreground">
               Due {formatDate(assignment.dueDate)}
             </span>
           )}

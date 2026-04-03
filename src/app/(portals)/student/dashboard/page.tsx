@@ -153,7 +153,7 @@ export default function StudentDashboardPage() {
     return (
       <div className="space-y-6">
         <PageHeader
-          title={`Welcome back, ${firstName}`}
+          title={`Hey ${firstName}! Ready to learn?`}
           description={todayFormatted}
         />
         <LoadingState type="card" count={4} className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" />
@@ -166,35 +166,35 @@ export default function StudentDashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <PageHeader
-        title={`Welcome back, ${firstName}`}
+        title={`Hey ${firstName}! Ready to learn?`}
         description={todayFormatted}
       />
 
       {/* Stat cards */}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Courses Enrolled"
+          title="My Subjects"
           value={courses?.length ?? 0}
           description="Active courses"
-          icon={<BookOpen className="size-4" />}
+          icon={<BookOpen className="size-5" />}
         />
         <StatCard
-          title="Pending Assignments"
+          title="Homework To Do"
           value={pendingAssignments.length}
           description="Need your attention"
-          icon={<ClipboardList className="size-4" />}
+          icon={<ClipboardList className="size-5" />}
         />
         <StatCard
-          title="Average Grade"
+          title="My Score"
           value={`${averageGrade}%`}
           description={`From ${grades?.length ?? 0} graded items`}
-          icon={<TrendingUp className="size-4" />}
+          icon={<TrendingUp className="size-5" />}
         />
         <StatCard
-          title="Attendance Rate"
+          title="Days Present"
           value={`${attendanceRate}%`}
           description={`${attendance?.length ?? 0} records`}
-          icon={<CalendarCheck className="size-4" />}
+          icon={<CalendarCheck className="size-5" />}
         />
       </div>
 
@@ -203,26 +203,26 @@ export default function StudentDashboardPage() {
         {/* Today's Classes */}
         <Card>
           <CardHeader>
-            <CardTitle>Today&apos;s Classes</CardTitle>
+            <CardTitle>My Classes Today</CardTitle>
           </CardHeader>
           <CardContent>
             {todayClasses.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">
-                No classes scheduled for today.
+              <p className="text-base text-muted-foreground py-4 text-center">
+                No classes today — enjoy your free time!
               </p>
             ) : (
               <div className="space-y-3">
                 {todayClasses.map((cls, i) => (
                   <div
                     key={`${cls.courseId}-${i}`}
-                    className="flex items-center gap-3 rounded-lg border p-3"
+                    className="flex items-center gap-3 rounded-lg border p-4"
                   >
                     <div
-                      className="h-10 w-1 shrink-0 rounded-full"
+                      className="h-10 w-2 shrink-0 rounded-full"
                       style={{ backgroundColor: cls.color }}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">
+                      <p className="truncate text-base font-medium">
                         {cls.courseName}
                       </p>
                       <p className="text-xs text-muted-foreground font-mono">
@@ -230,8 +230,8 @@ export default function StudentDashboardPage() {
                       </p>
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-0.5">
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-foreground">
-                        <Clock className="size-3" />
+                      <span className="inline-flex items-center gap-1 text-sm font-medium text-foreground">
+                        <Clock className="size-3.5" />
                         {cls.startTime} - {cls.endTime}
                       </span>
                       <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
@@ -249,12 +249,12 @@ export default function StudentDashboardPage() {
         {/* Upcoming Assignments */}
         <Card>
           <CardHeader>
-            <CardTitle>Upcoming Assignments</CardTitle>
+            <CardTitle>Homework Coming Up</CardTitle>
           </CardHeader>
           <CardContent>
             {upcomingAssignments.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4 text-center">
-                No upcoming assignments. You&apos;re all caught up!
+              <p className="text-base text-muted-foreground py-4 text-center">
+                All done! No homework right now.
               </p>
             ) : (
               <div className="space-y-3">
@@ -277,12 +277,12 @@ export default function StudentDashboardPage() {
       {/* Recent Grades */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Grades</CardTitle>
+          <CardTitle>My Recent Scores</CardTitle>
         </CardHeader>
         <CardContent>
           {recentGrades.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-4 text-center">
-              No grades recorded yet.
+            <p className="text-base text-muted-foreground py-4 text-center">
+              No scores yet — keep learning!
             </p>
           ) : (
             <div className="space-y-3">
@@ -292,25 +292,25 @@ export default function StudentDashboardPage() {
                 return (
                   <div
                     key={grade.id}
-                    className="flex items-center gap-3 rounded-lg border p-3"
+                    className="flex items-center gap-3 rounded-lg border p-4"
                   >
                     <div
-                      className="h-10 w-1 shrink-0 rounded-full"
+                      className="h-10 w-2 shrink-0 rounded-full"
                       style={{ backgroundColor: course?.color ?? "#6b7280" }}
                     />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">
+                      <p className="truncate text-base font-medium">
                         {assignment?.title ?? "Assignment"}
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {course?.name ?? "Course"} &middot; {formatDate(grade.date)}
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-3">
-                      <span className="text-sm font-semibold tabular-nums">
+                      <span className="text-base font-semibold tabular-nums">
                         {grade.score}/{grade.maxScore}
                       </span>
-                      <span className="text-xs text-muted-foreground tabular-nums">
+                      <span className="text-sm text-muted-foreground tabular-nums">
                         {calculatePercentage(grade.score, grade.maxScore)}%
                       </span>
                       <GradeBadge grade={grade.letterGrade} />

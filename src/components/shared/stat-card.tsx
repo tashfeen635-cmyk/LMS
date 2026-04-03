@@ -37,20 +37,20 @@ export default function StatCard({
   return (
     <Card className={cn("relative", className)}>
       <CardHeader>
-        <CardTitle className="text-xs font-medium text-muted-foreground">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
         </CardTitle>
         {icon && (
           <CardAction>
-            <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-primary/20">
+            <div className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-primary/20">
               {icon}
             </div>
           </CardAction>
         )}
       </CardHeader>
 
-      <CardContent className="space-y-1">
-        <div className="text-2xl font-bold tracking-tight text-foreground">
+      <CardContent className="space-y-1.5">
+        <div className="text-3xl font-bold tracking-tight text-foreground">
           {value}
         </div>
 

@@ -62,7 +62,7 @@ export default function StudentCoursesPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <PageHeader title="My Courses" description="View all your enrolled courses" />
+        <PageHeader title="My Subjects" description="All the subjects you are studying" />
         <LoadingState type="card" count={6} />
       </div>
     );
@@ -71,16 +71,16 @@ export default function StudentCoursesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <PageHeader title="My Courses" description="View all your enrolled courses" />
+      <PageHeader title="My Subjects" description="All the subjects you are studying" />
 
       {/* Search */}
       <div className="relative max-w-sm">
-        <Search className="absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Search courses..."
+          placeholder="Find a subject..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-8"
+          className="h-11 pl-9 text-base"
         />
       </div>
 
@@ -88,11 +88,11 @@ export default function StudentCoursesPage() {
       {filteredCourses.length === 0 ? (
         <EmptyState
           icon={<BookOpen className="size-6" />}
-          title={search ? "No matching courses" : "No courses enrolled"}
+          title={search ? "No matching subjects" : "No subjects yet"}
           description={
             search
               ? "Try a different search term."
-              : "You are not enrolled in any courses yet."
+              : "You don't have any subjects yet. They will show up here once you are enrolled!"
           }
         />
       ) : (

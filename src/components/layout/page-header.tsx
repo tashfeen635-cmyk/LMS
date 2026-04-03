@@ -20,11 +20,11 @@ export default function PageHeader({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0 space-y-1">
-        <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">
+        <h1 className="truncate text-3xl font-bold tracking-tight text-foreground">
           {title}
         </h1>
         {description && (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-base text-muted-foreground">{description}</p>
         )}
       </div>
       {children && (
